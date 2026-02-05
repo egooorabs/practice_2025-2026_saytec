@@ -1,8 +1,12 @@
 import { RouterProvider } from "react-router";
+import { Provider } from 'react-redux';
+import { store } from './store';
 import { routesConfig } from "./routes/routesConfig";
 
 export const App = () => {
-    return(
-        <RouterProvider router={routesConfig} />
-    )
+  return (
+    <Provider store={store}>
+      <RouterProvider router={routesConfig} />
+    </Provider>
+  );
 }
