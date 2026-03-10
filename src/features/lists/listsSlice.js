@@ -13,14 +13,12 @@ export const getLists = createAsyncThunk(
   async (boardId, { rejectWithValue }) => {
     try {
       const response = await listsAPI.getLists(boardId);
-      
       const lists = Array.isArray(response.data) ? response.data.map(list => ({
         id: list.id,
         name: list.name || 'Без названия',
         boardId: list.boardId,
         order: list.order || 0
       })) : [];
-      
       return lists;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Ошибка загрузки листов');
@@ -33,7 +31,6 @@ export const createList = createAsyncThunk(
   async (listData, { rejectWithValue }) => {
     try {
       const response = await listsAPI.createList(listData.name, listData.boardId);
-      
       return {
         id: response.data.id,
         name: response.data.name || listData.name,
@@ -46,18 +43,15 @@ export const createList = createAsyncThunk(
   }
 );
 
-
 export const editList = createAsyncThunk(
   'lists/editList',
   async (listData, { rejectWithValue }) => {
     try {
-      
       const response = await listsAPI.editList(
         listData.name,
         listData.id,
         listData.boardId
       );
-      
       return {
         id: response.data.id || listData.id,
         name: response.data.name || listData.name,
@@ -82,6 +76,17 @@ export const deleteList = createAsyncThunk(
   }
 );
 
+export const reorderList = createAsyncThunk(
+  'lists/reorderList',
+  async ({ listId, order, boardId }, { rejectWithValue }) => {
+    try {
+      return { listId, order, boardId };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Ошибка изменения порядка списка');
+    }
+  }
+);
+
 const listsSlice = createSlice({
   name: 'lists',
   initialState,
@@ -91,6 +96,16 @@ const listsSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
+    },
+    reorderListsLocally: (state, action) => {
+      const { startIndex, endIndex } = action.payload;
+      const listsCopy = [...state.lists];
+      const [removed] = listsCopy.splice(startIndex, 1);
+      listsCopy.splice(endIndex, 0, removed);
+      listsCopy.forEach((list, index) => {
+        list.order = index;
+      });
+      state.lists = listsCopy;
     },
   },
   extraReducers: (builder) => {
@@ -140,5 +155,5 @@ const listsSlice = createSlice({
   },
 });
 
-export const { setCurrentList, clearError } = listsSlice.actions;
+export const { setCurrentList, clearError, reorderListsLocally } = listsSlice.actions;
 export default listsSlice.reducer;

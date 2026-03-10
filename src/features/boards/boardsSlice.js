@@ -13,12 +13,10 @@ export const getBoards = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await boardsAPI.getBoards();
-      
+
       const boards = Array.isArray(response.data) ? response.data.map(board => ({
         id: board.id,
         name: board.name || 'Без названия',
-        description: board.description || '',
-        createdAt: board.createdAt,
         order: board.order || 0
       })) : [];
       
@@ -34,17 +32,10 @@ export const createBoard = createAsyncThunk(
   async (boardData, { rejectWithValue, dispatch }) => {
     try {
       const response = await boardsAPI.createBoard({ name: boardData.name });
-
       const newBoard = {
-        id: response.data.id,
         name: response.data.name || boardData.name,
-        description: response.data.description || boardData.description || '',
-        createdAt: response.data.createdAt,
-        order: response.data.order || 0
       };
-      
       await dispatch(getBoards());
-      
       return newBoard;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Ошибка создания доски');
@@ -57,17 +48,11 @@ export const editBoard = createAsyncThunk(
   async (boardData, { rejectWithValue, dispatch }) => {
     try {
       const response = await boardsAPI.editBoard(boardData.name, boardData.id);
-      
       const updatedBoard = {
         id: response.data.id || boardData.id,
         name: response.data.name || boardData.name,
-        description: response.data.description || boardData.description || '',
-        createdAt: response.data.createdAt || boardData.createdAt,
-        order: response.data.order || boardData.order || 0
       };
-      
       await dispatch(getBoards());
-      
       return updatedBoard;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Ошибка изменения доски');
@@ -80,12 +65,22 @@ export const deleteBoard = createAsyncThunk(
   async (boardId, { rejectWithValue, dispatch }) => {
     try {
       await boardsAPI.deleteBoard(boardId);
-      
       await dispatch(getBoards());
-      
       return boardId;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Ошибка удаления доски');
+    }
+  }
+);
+
+export const reorderBoard = createAsyncThunk(
+  'boards/reorderBoard',
+  async ({ boardId, order }, { rejectWithValue }) => {
+    try {
+      await boardsAPI.reorderBoard(boardId, order);
+      return { boardId, order };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Ошибка изменения порядка доски');
     }
   }
 );
@@ -108,6 +103,16 @@ const boardsSlice = createSlice({
       if (state.currentBoard?.id === action.payload.id) {
         state.currentBoard = { ...state.currentBoard, ...action.payload };
       }
+    },
+    reorderBoardsLocally: (state, action) => {
+      const { startIndex, endIndex } = action.payload;
+      const result = Array.from(state.boards);
+      const [removed] = result.splice(startIndex, 1);
+      result.splice(endIndex, 0, removed);
+      result.forEach((board, index) => {
+        board.order = index;
+      });
+      state.boards = result;
     },
   },
   extraReducers: (builder) => {
@@ -151,5 +156,5 @@ const boardsSlice = createSlice({
   },
 });
 
-export const { setCurrentBoard, clearError, updateBoardLocally } = boardsSlice.actions;
+export const { setCurrentBoard, clearError, updateBoardLocally, reorderBoardsLocally } = boardsSlice.actions;
 export default boardsSlice.reducer;

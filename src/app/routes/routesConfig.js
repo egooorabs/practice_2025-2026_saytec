@@ -6,22 +6,23 @@ import { Error404Page } from "../../pages/Error404/Error404Page";
 import { DeskPage } from "../../pages/Desk/DeskPage";
 import { BoardPage } from "../../pages/Board/BoardPage";
 import { ProtectedRoute } from "../../components/ProtectedRoute";
+import { ROUTES } from "../../shared/constants/routes";
 
 export const routesConfig = createBrowserRouter([
   {
-    path: '/',
+    path: ROUTES.HOME,
     element: <HomePage/>
   },
   {
-    path: '/auth',
+    path: ROUTES.AUTH,
     element: <AuthPage/>
   },
   {
-    path: '/register',
+    path: ROUTES.REGISTER,
     element: <RegPage/>
   },
   {
-    path: '/desk',
+    path: ROUTES.DESK,
     element: (
       <ProtectedRoute>
         <DeskPage/>
@@ -29,7 +30,7 @@ export const routesConfig = createBrowserRouter([
     )
   },
   {
-    path: '/board/:boardId',
+    path: ROUTES.BOARD,
     element: (
       <ProtectedRoute>
         <BoardPage/>
@@ -37,19 +38,19 @@ export const routesConfig = createBrowserRouter([
     )
   },
   {
-    path: '/404',
+    path: ROUTES.ERROR_404,
     element: <Error404Page/>
   },
   {
-    path: '/about',
+    path: ROUTES.ABOUT,
     element: <Error404Page/>
   },
   {
-    path: '/contacts',
+    path: ROUTES.CONTACTS,
     element: <Error404Page/>
   },
   {
-    path: '*',
+    path: ROUTES.ANY,
     element: <Error404Page/>
   }
 ]);

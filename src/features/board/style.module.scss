@@ -337,3 +337,65 @@
   border-radius: 8px;
   margin-bottom: 10px;
 }
+
+.dragging {
+  opacity: 0.5;
+  transform: rotate(2deg);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.list {
+  transition: all 0.2s ease;
+  cursor: move;
+  user-select: none;
+}
+
+.card {
+  transition: all 0.2s ease;
+  cursor: move;
+  user-select: none;
+}
+
+.cardCheckbox {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.cardContent {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.closeListBtn, .deleteTaskBtn {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.addCard {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.listTitle {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.emptyListDropTarget {
+  transition: all 0.2s ease;
+}
+
+.dropOver {
+  background: rgba(79, 70, 229, 0.2);
+  border: 2px dashed #4f46e5;
+  border-radius: 15px;
+}
+
+.emptyListDropTarget .list {
+  transition: all 0.2s ease;
+}
+
+.emptyListDropTarget.dropOver .list {
+  background: rgba(79, 70, 229, 0.1);
+  transform: scale(1.02);
+}
