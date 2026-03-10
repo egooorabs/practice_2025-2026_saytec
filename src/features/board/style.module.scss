@@ -266,3 +266,74 @@
 .btnSecondary:hover {
     background: rgba(22, 41, 56, 0.2) !important;
 }
+
+.taskInput {
+  flex: 1;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  padding: 5px;
+  color: #162938;
+  font-size: 14px;
+  outline: none;
+}
+
+.deleteTaskBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0 5px;
+  font-size: 16px;
+}
+
+.deleteTaskBtn:hover {
+  color: #ff4444;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  margin-top: 80px;
+  color: white;
+  font-size: 18px;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 16px;
+  text-align: center;
+}
+
+.listEditInput {
+  flex: 1;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  padding: 5px;
+  color: #162938;
+  font-size: 16px;
+  outline: none;
+  margin-right: 10px;
+}
+
+.listEditInput:focus {
+  border-color: #fff;
+}
+
+.noTasks {
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  font-style: italic;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}

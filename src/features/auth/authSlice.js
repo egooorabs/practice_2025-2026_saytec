@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { authAPI } from '../../app/services/api';
 
-
 const getStoredUser = () => {
   try {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
   } catch (error) {
-    console.error('Ошибка парсинга данных пользователя из localStorage:', error);
+    console.error('Ошиибка парсинга данных пользователя из localStorage:', error);
     return null;
   }
 };
@@ -16,7 +15,7 @@ const getStoredToken = () => {
   try {
     return localStorage.getItem('token') || null;
   } catch (error) {
-    console.error('Ошибка получения токена из localStorage:', error);
+    console.error('Ошиибка получения токена из localStorage:', error);
     return null;
   }
 };
@@ -65,24 +64,19 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
-      try {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      } catch (error) {
-        console.error('Ошибка очистки localStorage:', error);
-      }
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     },
     setCredentials: (state, action) => {
-      const { user, access_token } = action.payload;
+      const { token, name, email, id } = action.payload;
+      const user = { name, email, id };
+      
       state.user = user;
-      state.token = access_token;
+      state.token = token;
       state.isAuthenticated = true;
-      try {
-        localStorage.setItem('token', access_token);
-        localStorage.setItem('user', JSON.stringify(user));
-      } catch (error) {
-        console.error('Ошибка соохранения в localStorage:', error);
-      }
+      
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
     },
     clearError: (state) => {
       state.error = null;
@@ -96,14 +90,25 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.isAuthenticated = true;
-        state.user = action.payload.user;
-        state.token = action.payload.access_token;
-        try {
-          localStorage.setItem('token', action.payload.access_token);
-          localStorage.setItem('user', JSON.stringify(action.payload.user));
-        } catch (error) {
-          console.error('Ошибка соохранения в localStorage:', error);
+        
+        const { token, name, email, id } = action.payload;
+        
+        if (token) {
+          const user = {
+            name: name || 'User',
+            email: email || '',
+            id: id || null
+          };
+          
+          state.isAuthenticated = true;
+          state.user = user;
+          state.token = token;
+          
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(user));
+          
+        } else {
+          state.error = 'Токен не получен от сервера';
         }
       })
       .addCase(login.rejected, (state, action) => {
@@ -116,14 +121,25 @@ const authSlice = createSlice({
       })
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
-        state.isAuthenticated = true;
-        state.user = action.payload.user;
-        state.token = action.payload.access_token;
-        try {
-          localStorage.setItem('token', action.payload.access_token);
-          localStorage.setItem('user', JSON.stringify(action.payload.user));
-        } catch (error) {
-          console.error('Ошибка соохранения в localStorage:', error);
+        
+        const { token, name, email, id } = action.payload;
+        
+        if (token) {
+          const user = {
+            name: name || 'User',
+            email: email || '',
+            id: id || null
+          };
+          
+          state.isAuthenticated = true;
+          state.user = user;
+          state.token = token;
+          
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(user));
+          
+        } else {
+          state.error = 'Токен не получен при регистрации';
         }
       })
       .addCase(register.rejected, (state, action) => {

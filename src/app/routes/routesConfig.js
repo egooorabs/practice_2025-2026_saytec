@@ -29,7 +29,7 @@ export const routesConfig = createBrowserRouter([
     )
   },
   {
-    path: '/board',
+    path: '/board/:boardId',
     element: (
       <ProtectedRoute>
         <BoardPage/>
