@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { login } from './authSlice';
 import styles from './style.module.scss';
 import { Link } from "react-router";
+import { ROUTES } from '../../shared/constants/routes';
 
 export const Auth = () => {
   const [email, setEmail] = useState('');
@@ -36,7 +37,7 @@ export const Auth = () => {
   return (
     <div className={styles.wrapper}>
       <span className={styles["icon-close"]}>
-        <Link to="/">
+        <Link to={ROUTES.HOME}>
           <ion-icon name="close"></ion-icon>
         </Link>
       </span>
@@ -96,7 +97,7 @@ export const Auth = () => {
           <div className={styles["login-register"]}>
             <p>
               Нет аккаунта?{" "}
-              <Link to="/register" className={styles["register-link"]}>
+              <Link to={ROUTES.REGISTER} className={styles["register-link"]}>
                 Зарегистрироваться
               </Link>
             </p>

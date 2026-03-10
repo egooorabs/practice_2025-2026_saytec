@@ -91,13 +91,12 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         
-        const { token, name, email, id } = action.payload;
+        const { token, name, email } = action.payload;
         
         if (token) {
           const user = {
             name: name || 'User',
             email: email || '',
-            id: id || null
           };
           
           state.isAuthenticated = true;
@@ -122,13 +121,12 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
         
-        const { token, name, email, id } = action.payload;
+        const { token, name, email } = action.payload;
         
         if (token) {
           const user = {
             name: name || 'User',
             email: email || '',
-            id: id || null
           };
           
           state.isAuthenticated = true;

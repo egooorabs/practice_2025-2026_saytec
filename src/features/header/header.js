@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../auth/authSlice';
 import styles from './style.module.scss';
+import { ROUTES } from '../../shared/constants/routes';
 
 export const Header = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -8,17 +9,17 @@ export const Header = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    window.location.href = '/';
+    window.location.href = ROUTES.HOME;
   };
 
   return (
     <header className={styles.header}>
       <h2 className={styles.logo}>SAYTEC</h2>
       <nav className={styles.navigation}>
-        <a href="/">Главная</a>
-        <a href="/about">О нас</a>
-        <a href="/desk">Мои доски</a>
-        <a href="/contacts">Контакты</a>
+        <a href={ROUTES.HOME}>Главная</a>
+        <a href={ROUTES.ABOUT}>О нас</a>
+        <a href={ROUTES.DESK}>Мои доски</a>
+        <a href={ROUTES.CONTACTS}>Контакты</a>
         
         {isAuthenticated ? (
           <div className={styles.userSection}>
@@ -33,7 +34,7 @@ export const Header = () => {
             </button>
           </div>
         ) : (
-          <button className={styles.btnLogin} onClick={() => window.location.href='/auth'}>
+          <button className={styles.btnLogin} onClick={() => window.location.href=ROUTES.AUTH}>
             Войти
           </button>
         )}
